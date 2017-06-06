@@ -18,6 +18,7 @@ Quickstart
 * sudo su - cumulus
 * cd netqdemo
 * ansible-playbook -s RUNME.yml
+* Log out and log back in to enable command completion for netq.
 * netq help
 * netq check bgp
 * netq trace l3 10.1.20.1 from 10.3.20.3
