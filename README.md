@@ -7,7 +7,7 @@ This demo will install Cumulus Linux [NetQ](https://docs.cumulusnetworks.com/dis
 Quickstart
 ------------------------
 * Download the NetQ Telemetry Server from https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&version=1.0. You need to be logged in to the site to access this.
-* Pick the virtualbox hypervisor. If you need a libvirt version, use vagrate mutate plugin.
+* Pick the Vagrant hypervisor. This assumes the Virtualbox hypervisor. If you need a libvirt version, use vagrate mutate plugin.
 * Add the downloaded box to vagrant via: vagrant box add cumulus-netq-telemetry-server-amd64-1.0.0-vagrant.box --name=cumulus/ts
 * The Telemetry Server will be the oob-mgmt-server in the picture.
 * If you do not have the telemetry sever already installed, vagrant will refuse to spin up
