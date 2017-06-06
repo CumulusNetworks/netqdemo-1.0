@@ -8,6 +8,7 @@ Quickstart
 ------------------------
 * Download the Telemetry Server from cumulusnetworks.com/downloads page, select "netq-virtual dropdown, download NetQ vagrant box
 * Add the downloaded box to vagrant via: vagrant box add cumulus-netq-telemetry-server-amd64-1.0.0-vagrant.box --name=cumulus/ts
+* The Telemetry Server will be the oob-mgmt-server in the picture.
 * If you do not have the telemetry sever already installed, vagrant will refuse to spin up
 * git clone https://github.com/cumulusnetworks/netqdemo-1.0 netqdemo
 * cd netqdemo
