@@ -55,5 +55,5 @@ If a previous configuration was applied to the reference topology, it can be res
 Caveats
 -------
 If a node is deemed unreachable during the playbook run, especially during the netq
-install part, ensure the node is reachable via 'ansible <nodename> -m ping' and just
-rerun the netq playbook again for that node via 'ansible-playbook -s --limit <nodename>  netq.yml' where <nodename> in each case is replaced by the node in question.
+install part, ensure the node is reachable via `ansible <nodename> -m ping` and just
+rerun the netq playbook again for that node via `ansible-playbook -s --limit <nodename>  netq.yml` where <nodename> in each case is replaced by the node in question.
