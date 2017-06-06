@@ -296,7 +296,7 @@ Vagrant.configure("2") do |config|
   ##### DEFINE VM for oob-mgmt-server #####
   config.vm.define "oob-mgmt-server" do |device|
     device.vm.hostname = "oob-mgmt-server"
-    device.vm.box = "cts"
+    device.vm.box = "cumulus/ts"
 
 
     device.vm.provider "virtualbox" do |v|
@@ -306,9 +306,10 @@ Vagrant.configure("2") do |config|
     end
     device.vm.synced_folder ".", "/vagrant", disabled: true
 
-      # NETWORK INTERFACES
-      # link for eth1 --> oob-mgmt-switch:swp1
-      device.vm.network "private_network", virtualbox__intnet: "#{wbid}_net54", auto_config: false , :mac => "44383900005f"
+    # NETWORK INTERFACES
+    # link for eth1 --> oob-mgmt-switch:swp1
+    device.vm.network "private_network", virtualbox__intnet: "#{wbid}_net54", auto_config: false , :mac => "44383900005f"
+    device.vm.network "forwarded_port", guest: 9000, host: 9002 
 
 
     device.vm.provider "virtualbox" do |vbox|
@@ -321,9 +322,6 @@ end
 
       # Fixes "stdin: is not a tty" and "mesg: ttyname failed : Inappropriate ioctl for device"  messages --> https://github.com/mitchellh/vagrant/issues/1673
       device.vm.provision :shell , inline: "(grep -q 'mesg n' /root/.profile 2>/dev/null && sed -i '/mesg n/d' /root/.profile  2>/dev/null && echo 'Ignore the previous error, fixing this now...') || true;"
-
-      # Shorten Boot Process - Applies to Ubuntu Only - remove \"Wait for Network\"
-      device.vm.provision :shell , inline: "sed -i 's/sleep [0-9]*/sleep 1/' /etc/init/failsafe.conf || true"
 
       # Run Any Extra Config
       device.vm.provision :shell , path: "./helper_scripts/config_oob_server.sh"
@@ -344,9 +342,10 @@ end
         server02: {ip: "192.168.0.32", mac: "a0:00:00:00:00:32"},
         server04: {ip: "192.168.0.34", mac: "a0:00:00:00:00:34"},
         }}
-    device.vm.provision :shell , inline: "sudo apt-get update"
-    device.vm.provision :shell , inline: "sudo apt-get install git -y"
-    device.vm.provision :shell , inline: "git clone https://github.com/cumulusnetworks/cldemo-provision "
+
+    device.vm.provision :shell , path: "oob-mgmt-server-provision.sh"
+    device.vm.provision :shell , inline: "ansible-playbook cldemo-provision-ts/site.yml --extra-vars '#{extravars.to_json}'  --connection=local -i localhost,"
+    device.vm.provision :shell , path: "oob-mgmt-server-netq-setup.sh"
 
   end
 

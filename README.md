@@ -6,12 +6,15 @@ This demo will install Cumulus Linux [NetQ](https://docs.cumulusnetworks.com/dis
 
 Quickstart
 ------------------------
-* git clone https://github.com/cumulusnetworks/cldemo-netq-1.0 cldemo-netq
+* Download the Telemetry Server from cumulusnetworks.com/downloads page, select "netq-virtual dropdown, download NetQ vagrant box
+* Add the downloaded box to vagrant via: vagrant box add cumulus-netq-telemetry-server-amd64-1.0.0-vagrant.box --name=cumulus/ts
+* If you do not have the telemetry sever already installed, vagrant will refuse to spin up
+* git clone https://github.com/cumulusnetworks/netqdemo-1.0 netqdemo
 * cd cldemo-netq
 * vagrant up
 * vagrant ssh oob-mgmt-server
 * sudo su - cumulus
-* cd cldemo-netq
+* cd netqdemo
 * ansible-playbook -s RUNME.yml
 * ssh leaf01
 * netq
@@ -22,45 +25,15 @@ Quickstart
 Details
 ------------------------
 
-This demo will configure a layer 3 BGP network as well as the netq agent and server components. The demo is downloaded onto the `oob-mgmt-server` under the `cumulus` user. It assumes the network is up and running (via `vagrant up`) but it **has not** yet been configured. The playbook `RUNME.yml` will configure BGP on all spine and leafs, clag on all the ToR switches, bonds on the servers, as well as install the necessary netq components. Once the netq demo has been configured with `RUNME.yml` you can log into any node in the network to interact with the netq service or use netq directly from the oob-mgmt-server itself. Use the `netq` command to interact with the netq agent.
+This demo will:
+* configure the customer reference topology with BGP unnumbered
+* configure CLAG on the leaves for the servers to be dual-attached and bonded. 
+* install NetQ on all nodes including servers and routers 
+* configure NetQ agents to start pushing data to the telemetry server
 
-cumulus@oob-mgmt-server:~/cldemo-netq-l3$ ssh leaf01
+The servers are assumed to be Ubuntu 16.04 hosts, and the version of Cumulus VX is at least 3.3.0. 
 
-    Welcome to Cumulus VX (TM)
-
-    Cumulus VX (TM) is a community supported virtual appliance designed for
-    experiencing, testing and prototyping Cumulus Networks' latest technology.
-    For any questions or technical support, visit our community site at:
-    http://community.cumulusnetworks.com
-    
-    The registered trademark Linux (R) is used pursuant to a sublicense from LMI,
-    the exclusive licensee of Linus Torvalds, owner of the mark on a world-wide
-    basis.
-    Last login: Sun Nov 20 10:15:25 2016 from 192.168.0.254
-    
-    cumulus@leaf01:~$ netq
-    Node Name    Connect Time         Last Connect    Status
-    -----------  -------------------  --------------  --------
-    leaf01       2016-11-20 17:54:02  24 seconds ago  Fresh
-    leaf02       2016-11-20 17:54:02  23 seconds ago  Fresh
-    leaf03       2016-11-20 17:54:02  24 seconds ago  Fresh
-    leaf04       2016-11-20 17:54:02  24 seconds ago  Fresh
-    spine01      2016-11-20 17:54:02  24 seconds ago  Fresh
-    spine02      2016-11-20 17:54:02  22 seconds ago  Fresh```
-
-
-Hitting TAB after typing 'netq' will show you commands available along with help text.
-
-    cumulus@leaf01:~$ netq
-        add      :  Update configuration
-        agent    :  Netq agent
-        check    :  check health of services or correctness of parameter
-        help     :  Show usage info
-        resolve  :  Annotate input with names and interesting info
-        server   :  IP address of DB server
-        show     :  Show fabric-wide info
-        trace    :  Control plane trace path across fabric
-        view     :  Show output of pre-defined commands on specific node```
+When the playbook RUNME.yml is run, it assumes the network is up and running (via `vagrant up`) but it **has not** yet been configured. If the network has been configured already, run the reset.yml playbook to reset the configuration state of the network. Once the netq demo has been configured with `RUNME.yml` you can either log into any node in the network or use the oob-mgmt-server directly to interact with the netq service. Use the `netq` command to interact with the NetQ system.
 
 Some useful examples to get you going
     netq check bgp
