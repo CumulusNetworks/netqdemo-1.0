@@ -322,8 +322,6 @@ Vagrant.configure("2") do |config|
     device.vm.provider :libvirt do |v|
       v.memory = 8*1024
     end
-    device.vm.network "forwarded_port", guest: 2375, host: 2375 # docker API
-    device.vm.network "forwarded_port", guest: 6379, host: 6379 # redis
     device.vm.network "forwarded_port", guest: 9000, host: 9002, gateway_ports: true, host_ip: '*', adapter: 'eno1' # portainer
  
     # NETWORK INTERFACES
@@ -362,7 +360,6 @@ Vagrant.configure("2") do |config|
         server02: {ip: "192.168.0.32", mac: "a0:00:00:00:00:32"},
         server04: {ip: "192.168.0.34", mac: "a0:00:00:00:00:34"},
         }}
-    device.vm.provision "file", source: "/home/cumulus/work/cldemo-netq/netq.yml", destination: "/tmp/netq.yml"
     device.vm.provision :shell , path: "oob-mgmt-server-provision.sh"
     device.vm.provision :shell , inline: "ansible-playbook cldemo-provision-ts/site.yml --extra-vars '#{extravars.to_json}'  --connection=local -i localhost,"
     device.vm.provision :shell , path: "oob-mgmt-server-netq-setup.sh"

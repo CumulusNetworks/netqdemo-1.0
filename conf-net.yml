@@ -1,15 +1,22 @@
 
 # This task configures /etc/network/interfaces on ifupdown2. The variables for
 # which interfaces are neighbors and networks come from the group_vars/all file.
-- name: configure networking
+- name: configure mgmt VRF
+  shell: sleep 2 && net add vrf mgmt && net commit
+  ignore_errors: true
+  async: 1
+  poll: 0
+
+- name: Wait for ssh to come back up
+  local_action: wait_for host={{ inventory_hostname }} state=started delay=3 timeout=7
+
+- name: configure rest of networking
   nclu:
       atomic: true
       description: "configure all the newtorking"
       template: |
 
             add loopback lo ip address {{ my_ip }}/32
-            add vrf mgmt
-
             {% if 'leaf' in hostvars[ansible_hostname]['group_names'] %}
                add int {{ leaf_to_spine_ports }}
                {% if 'exit' in hostvars[ansible_hostname]['group_names'] %}

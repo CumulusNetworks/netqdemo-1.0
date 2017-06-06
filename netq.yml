@@ -39,3 +39,7 @@
      - name: Start netq-agent  
        service: name=netq-agent state=restarted  
 
+- hosts: localhost
+  tasks:
+     - name: Install netq apps
+       apt: name=netq-apps state=installed

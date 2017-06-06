@@ -16,8 +16,7 @@ Quickstart
 * sudo su - cumulus
 * cd netqdemo
 * ansible-playbook -s RUNME.yml
-* ssh leaf01
-* netq
+* netq help
 * netq check bgp
 * netq trace l3 10.1.20.1 from 10.3.20.3
 * ip route | netq resolve | less -R
