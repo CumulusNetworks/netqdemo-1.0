@@ -30,7 +30,7 @@ This demo will:
 * install NetQ on all nodes including servers and routers 
 * configure NetQ agents to start pushing data to the telemetry server
 
-The servers are assumed to be Ubuntu 16.04 hosts, and the version of Cumulus VX is at least 3.3.0. 
+The servers are assumed to be Ubuntu 16.04 hosts, and the version of Cumulus VX is at least 3.3.0. The hypervisor used is assumed to be Virtualbox by default. If you want to use the libvirt version, copy Vagrantfile-kvm to Vagrantfile.
 
 When the playbook RUNME.yml is run, it assumes the network is up and running (via `vagrant up`) but it **has not** yet been configured. If the network has been configured already, run the reset.yml playbook to reset the configuration state of the network. Once the netq demo has been configured with `RUNME.yml` you can either log into any node in the network or use the oob-mgmt-server directly to interact with the netq service. Use the `netq` command to interact with the NetQ system.
 
