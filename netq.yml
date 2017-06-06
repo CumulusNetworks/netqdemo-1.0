@@ -45,7 +45,7 @@
        apt: name=netq-apps state=installed
 
      - name: Start netqd server
-       server: name=netqd state=restarted
+       service: name=netqd state=restarted
 
      - name: Add local netq server IP
        command: netq add server 127.0.0.1
