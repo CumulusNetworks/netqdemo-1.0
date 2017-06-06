@@ -343,9 +343,9 @@ end
         server04: {ip: "192.168.0.34", mac: "a0:00:00:00:00:34"},
         }}
 
-    device.vm.provision :shell , path: "oob-mgmt-server-provision.sh"
+    device.vm.provision :shell , path: "./helper_scripts/oob-mgmt-server-provision.sh"
     device.vm.provision :shell , inline: "ansible-playbook cldemo-provision-ts/site.yml --extra-vars '#{extravars.to_json}'  --connection=local -i localhost,"
-    device.vm.provision :shell , path: "oob-mgmt-server-netq-setup.sh"
+    device.vm.provision :shell , path: "./helper_scripts/oob-mgmt-server-netq-setup.sh"
 
   end
 
