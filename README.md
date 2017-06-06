@@ -7,7 +7,7 @@ This demo will install Cumulus Linux [NetQ](https://docs.cumulusnetworks.com/dis
 Quickstart
 ------------------------
 * Download the NetQ Telemetry Server from https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&version=1.0. You need to be logged in to the site to access this.
-* Pick the virtualbox hypervisor (or RHEL if you're comfortable/familiar with KVM).
+* Pick the virtualbox hypervisor. If you need a libvirt version, use vagrate mutate plugin.
 * Add the downloaded box to vagrant via: vagrant box add cumulus-netq-telemetry-server-amd64-1.0.0-vagrant.box --name=cumulus/ts
 * The Telemetry Server will be the oob-mgmt-server in the picture.
 * If you do not have the telemetry sever already installed, vagrant will refuse to spin up
@@ -51,3 +51,9 @@ Resetting The Topology
 If a previous configuration was applied to the reference topology, it can be reset with the `reset.yml` playbook provided. This can be run before configuring netq to ensure a clean starting state.
 
     ansible-playbook -s reset.yml
+
+Caveats
+-------
+If a node is deemed unreachable during the playbook run, especially during the netq
+install part, ensure the node is reachable via 'ansible <nodename> -m ping' and just
+rerun the netq playbook again for that node via 'ansible-playbook -s --limit <nodename>  netq.yml' where <nodename> in each case is replaced by the node in question.
