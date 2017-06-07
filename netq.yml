@@ -7,7 +7,7 @@
      - name: Start netqd service
        service: name=netqd state=restarted
 
-     - pause: seconds=10
+     - pause: seconds=5
 
      - name: Add netq server IP addr
        command: netq add server 192.168.0.254 vrf mgmt
@@ -28,11 +28,12 @@
   
      - name: Install cumulus-netq  
        apt: name=cumulus-netq update_cache=yes state=present  
-     - pause: seconds=10  
    
      - name: Start netqd server
        service: name=netqd state=restarted
   
+     - pause: seconds=5
+
      - name: Add netq server IP addr  
        command: netq add server 192.168.0.254  
   
@@ -46,6 +47,8 @@
 
      - name: Start netqd server
        service: name=netqd state=restarted
+
+     - pause: seconds=5
 
      - name: Add local netq server IP
        command: netq add server 127.0.0.1
