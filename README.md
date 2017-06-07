@@ -46,6 +46,7 @@ Some useful examples to get you going:
 * netq show changes between 1s and 2m
 * ip route | netq resolve | less -R
 
+netq help and netq example provide further assistance in using netq. 
 Resetting The Topology
 ------------------------
 If a previous configuration was applied to the reference topology, it can be reset with the `reset.yml` playbook provided. This can be run before configuring netq to ensure a clean starting state.
@@ -58,4 +59,6 @@ The NetQ Telemetry Server isn't officially supported on KVM. However, I personal
 
 Caveats
 -------
-If a node is deemed unreachable during the playbook run, and this happens if the servers haven't finished rebooting after setup, ensure the node is reachable via `ansible <nodename> -m ping` and just rerun the netq playbook again for that node via `ansible-playbook -s --limit <nodename>  netq.yml` where <nodename> in each case is replaced by the node in question. For servers, for example, you can run `ansible-playbook -s --limit 'server*' netq.yml`.
+* If a node is deemed unreachable during the playbook run, and this happens if the servers haven't finished rebooting after setup, ensure the node is reachable via `ansible <nodename> -m ping` and just rerun the netq playbook again for that node via `ansible-playbook -s --limit <nodename>  netq.yml` where <nodename> in each case is replaced by the node in question. For servers, for example, you can run `ansible-playbook -s --limit 'server*' netq.yml`.
+* TAB complete works with netq command, but you'll need to log out and log back in to get it working after a fresh install.
+
