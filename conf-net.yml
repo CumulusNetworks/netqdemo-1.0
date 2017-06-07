@@ -15,7 +15,7 @@
       template: |
 
             add loopback lo ip address {{ my_ip }}/32
-           {% if 'leaf' in hostvars[ansible_hostname]['group_names'] %}
+            {% if 'leaf' in hostvars[ansible_hostname]['group_names'] %}
                add int {{ leaf_to_spine_ports }}
                {% if 'exit' not in hostvars[ansible_hostname]['group_names'] %}
                   add int {{ leaf_to_server_ports }}
