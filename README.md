@@ -47,6 +47,7 @@ Some useful examples to get you going:
 * ip route | netq resolve | less -R
 
 netq help and netq example provide further assistance in using netq. 
+
 Resetting The Topology
 ------------------------
 If a previous configuration was applied to the reference topology, it can be reset with the `reset.yml` playbook provided. This can be run before configuring netq to ensure a clean starting state.
