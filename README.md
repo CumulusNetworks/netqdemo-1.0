@@ -37,14 +37,14 @@ The servers are assumed to be Ubuntu 16.04 hosts, and the version of Cumulus VX 
 
 When the playbook RUNME.yml is run, it assumes the network is up and running (via `vagrant up`) but it **has not** yet been configured. If the network has been configured already, run the reset.yml playbook to reset the configuration state of the network. Once the netq demo has been configured with `RUNME.yml` you can either log into any node in the network or use the oob-mgmt-server directly to interact with the netq service. Use the `netq` command to interact with the NetQ system.
 
-Some useful examples to get you going
-    netq check bgp
-    netq check vlan
-    netq trace l3 10.1.20.1 from 10.3.20.3
-    netq show ip routes 10.1.20.1 origin
-    netq show macs leaf01
-    netq show changes between 1s and 2m
-    ip route | netq resolve | less -R
+Some useful examples to get you going:
+* netq check bgp
+* netq check vlan
+* netq trace l3 10.1.20.1 from 10.3.20.3
+* netq show ip routes 10.1.20.1 origin
+* netq show macs leaf01
+* netq show changes between 1s and 2m
+* ip route | netq resolve | less -R
 
 Resetting The Topology
 ------------------------
