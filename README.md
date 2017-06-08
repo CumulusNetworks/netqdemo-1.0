@@ -24,6 +24,8 @@ Quickstart
 * netq trace l3 10.1.20.1 from 10.3.20.3
 * ip route | netq resolve | less -R
 
+This demo is known to work with Vagrant 1.8.7, but not 1.9.x.
+
 Details
 ------------------------
 
@@ -62,4 +64,4 @@ Caveats
 -------
 * If a node is deemed unreachable during the playbook run, and this happens if the servers haven't finished rebooting after setup, ensure the node is reachable via `ansible <nodename> -m ping` and just rerun the netq playbook again for that node via `ansible-playbook -s --limit <nodename>  netq.yml` where <nodename> in each case is replaced by the node in question. For servers, for example, you can run `ansible-playbook -s --limit 'server*' netq.yml`.
 * TAB complete works with netq command, but you'll need to log out and log back in to get it working after a fresh install.
-
+* This demo is known to work with Vagrant 1.8.7, but not 1.9.x.
