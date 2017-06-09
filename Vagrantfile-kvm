@@ -320,7 +320,7 @@ Vagrant.configure("2") do |config|
     #   see note here: https://github.com/pradels/vagrant-libvirt#synced-folders
     device.vm.synced_folder '.', '/vagrant', :disabled => true
     device.vm.provider :libvirt do |v|
-      v.memory = 8*1024
+      v.memory = 1*1024
     end
     device.vm.network "forwarded_port", guest: 9000, host: 9002, gateway_ports: true, host_ip: '*', adapter: 'eno1' # portainer
  

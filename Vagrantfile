@@ -302,7 +302,7 @@ Vagrant.configure("2") do |config|
     device.vm.provider "virtualbox" do |v|
       v.name = "#{wbid}_oob-mgmt-server"
       v.customize ["modifyvm", :id, '--audiocontroller', 'AC97', '--audio', 'Null']
-      v.memory = 8*1024
+      v.memory = 1*1024
     end
     device.vm.synced_folder ".", "/vagrant", disabled: true
 
