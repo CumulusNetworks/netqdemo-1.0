@@ -2,29 +2,34 @@
 
 This demo will install Cumulus Linux [NetQ](https://docs.cumulusnetworks.com/display/DOCS/Using+netq+to+Troubleshoot+the+Network) Fabric Validation System using the Cumulus [reference topology](https://github.com/cumulusnetworks/cldemo-vagrant). Please vist the reference topology github page for detailed instructions on using Cumulus Vx with Vagrant.
 
-![Cumulus Reference Topology](https://github.com/CumulusNetworks/cldemo-vagrant/raw/master/cldemo_topology.png)
+![Cumulus Reference Topology](https://github.com/CumulusNetworks/cldemo-vagrant/raw/master/cldemo_topology.png). 
 
 Quickstart
 ------------------------
+* Running this simulation uses up 8G of RAM.
+* Install [Vagrant](https://releases.hashicorp.com/vagrant/). Pick release 1.9.5 for OS X and 1.8.7 for Linux.
+* Install cumulus plugin for vagrant via `vagrant plugin install vagrant-cumulus`
+* Install [Ansible](instructions at http://docs.ansible.com/ansible/intro_installation.html)
+* Install git on your platform if you want to git clone this repository. Else select the download ZIP option from the directory and download the zip file.
 * Download the NetQ Telemetry Server from https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&version=1.0. You need to be logged in to the site to access this.
 * Pick the Vagrant hypervisor. This assumes the Virtualbox hypervisor. See note on libvirt below.
 * Add the downloaded box to vagrant via: vagrant box add cumulus-netq-telemetry-server-amd64-1.0.0-vagrant.box --name=cumulus/ts
 * The Telemetry Server will be the oob-mgmt-server in the picture.
 * If you do not have the telemetry sever already installed, vagrant will refuse to spin up
-* git clone https://github.com/cumulusnetworks/netqdemo-1.0 netqdemo
-* cd netqdemo
-* vagrant up
-* vagrant ssh oob-mgmt-server
-* sudo su - cumulus
-* cd netqdemo
-* ansible-playbook -s RUNME.yml
+* If using a zip file, extract the downloaded zip file. If using git, run `git clone https://github.com/cumulusnetworks/netqdemo-1.0 netqdemo`
+* `cd netqdemo`
+* `vagrant up`
+* `vagrant ssh oob-mgmt-server`
+* `sudo su - cumulus`
+* `cd netqdemo`
+* `ansible-playbook -s RUNME.yml`
 * Log out and log back in to enable command completion for netq.
-* netq help
-* netq check bgp
-* netq trace l3 10.1.20.1 from 10.3.20.3
-* ip route | netq resolve | less -R
+* `netq help`
+* `netq check bgp`
+* `netq trace l3 10.1.20.1 from 10.3.20.3`
+* `ip route | netq resolve | less -R`
 
-This demo is known to work with Vagrant 1.8.7, but not 1.9.x.
+This demo is known to work with Vagrant 1.8.7 on Linux, and Vagrant 1.9.5. on OS X.
 
 Details
 ------------------------
