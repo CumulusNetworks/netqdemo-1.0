@@ -49,7 +49,7 @@ Some useful examples to get you going:
 * netq check vlan
 * netq trace 10.1.20.1 from 10.3.20.3 vrf default
 * netq show ip routes 10.1.20.1 origin
-* netq show macs leaf01
+* netq leaf01 show macs
 * netq show changes between 1s and 2m
 * ip route | netq resolve | less -R
 
