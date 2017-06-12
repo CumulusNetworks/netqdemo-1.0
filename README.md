@@ -7,7 +7,7 @@ This demo will install Cumulus Linux [NetQ](https://docs.cumulusnetworks.com/dis
 Quickstart
 ------------------------
 * Running this simulation uses up 8G of RAM.
-* Install [Vagrant](https://releases.hashicorp.com/vagrant/). Pick release 1.9.5 for OS X and 1.8.7 for Linux.
+* Install [Vagrant](https://releases.hashicorp.com/vagrant/). Use release 1.9.5. 
 * Install cumulus plugin for vagrant via `vagrant plugin install vagrant-cumulus`
 * Install [Ansible](instructions at http://docs.ansible.com/ansible/intro_installation.html)
 * Install git on your platform if you want to git clone this repository. Else select the download ZIP option from the directory and download the zip file.
@@ -26,10 +26,10 @@ Quickstart
 * Log out and log back in to enable command completion for netq.
 * `netq help`
 * `netq check bgp`
-* `netq trace l3 10.1.20.1 from 10.3.20.3`
+* `netq trace 10.1.20.1 from 10.3.20.3`vrf default
 * `ip route | netq resolve | less -R`
 
-This demo is known to work with Vagrant 1.8.7 on Linux, and Vagrant 1.9.5. on OS X.
+This demo is known to work with Vagrant version 1.9.5.
 
 Details
 ------------------------
@@ -47,7 +47,7 @@ When the playbook RUNME.yml is run, it assumes the network is up and running (vi
 Some useful examples to get you going:
 * netq check bgp
 * netq check vlan
-* netq trace l3 10.1.20.1 from 10.3.20.3
+* netq trace 10.1.20.1 from 10.3.20.3 vrf default
 * netq show ip routes 10.1.20.1 origin
 * netq show macs leaf01
 * netq show changes between 1s and 2m
@@ -69,4 +69,4 @@ Caveats
 -------
 * If a node is deemed unreachable during the playbook run, and this happens if the servers haven't finished rebooting after setup, ensure the node is reachable via `ansible <nodename> -m ping` and just rerun the netq playbook again for that node via `ansible-playbook -s --limit <nodename>  netq.yml` where <nodename> in each case is replaced by the node in question. For servers, for example, you can run `ansible-playbook -s --limit 'server*' netq.yml`.
 * TAB complete works with netq command, but you'll need to log out and log back in to get it working after a fresh install.
-* This demo is known to work with Vagrant 1.8.7, but not 1.9.x.
+* This demo is known to work with Vagrant version 1.9.5

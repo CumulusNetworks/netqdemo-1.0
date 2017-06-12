@@ -11,14 +11,14 @@
 
 
 # Check required plugins
-REQUIRED_PLUGINS = %w(vagrant-cumulus)
-exit unless REQUIRED_PLUGINS.all? do |plugin|
-  Vagrant.has_plugin?(plugin) || (
-    puts "The #{plugin} plugin is required. Please install it with:"
-    puts "$ vagrant plugin install #{plugin}"
-    false
-  )
-end
+#REQUIRED_PLUGINS = %w(vagrant-cumulus)
+#exit unless REQUIRED_PLUGINS.all? do |plugin|
+#  Vagrant.has_plugin?(plugin) || (
+#    puts "The #{plugin} plugin is required. Please install it with:"
+#    puts "$ vagrant plugin install #{plugin}"
+#    false
+#  )
+#end
 
 $script = <<-SCRIPT
 if grep -q -i 'cumulus' /etc/lsb-release &> /dev/null; then
