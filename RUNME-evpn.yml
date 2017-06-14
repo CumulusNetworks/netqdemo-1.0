@@ -25,6 +25,10 @@
     set_fact:
        my_ip: "{{ lo_ip_subnet|ipsubnet(32, (my_node_id|int))|ipaddr('address') }}"
 
+  - name: Set ISL ports
+    set_fact:
+       isl_ports: "{{ leaf_to_spine_ports }}"
+
   - name: Get my ASN for leaves
     set_fact:
       my_asn: "{{ bgp_leaf_asn_base|int + my_node_id|int }}"
@@ -53,6 +57,10 @@
     set_fact:
        my_ip: "{{ lo_ip_subnet|ipsubnet(32, -(my_node_id|int)-1)|ipaddr('address') }}"
 
+  - name: Set ISL ports
+    set_fact:
+       isl_ports: "{{ spine_to_leaf_ports, spine_to_exit_ports}}"
+
   - name: Get my ASN for spines
     set_fact:
       my_asn: "{{ bgp_spine_asn }}"
@@ -69,7 +77,7 @@
 
   - name: Get my node ID
     set_fact:
-      my_node_id: "{{ (64 + (inventory_hostname.split('t')[1]|int))|int }}"
+      my_node_id: "{{ (16 + (inventory_hostname.split('t')[1]|int))|int }}"
     tags:
       - compute
       - always
@@ -83,6 +91,10 @@
   - name: Get loopback IP for leaves
     set_fact:
        my_ip: "{{ lo_ip_subnet|ipsubnet(32, (my_node_id|int))|ipaddr('address') }}"
+
+  - name: Set ISL ports
+    set_fact:
+       isl_ports: "{{ leaf_to_spine_ports }}"
 
   - name: Get my ASN for exit leaves
     set_fact:
@@ -107,16 +119,16 @@
   - include: compute-leaf-vars-common.yml
     when: "{{ 'leaf' in group_names }}"
 
-  - include: compute-leaf-vars-l3.yml
+  - include: compute-leaf-vars-evpn.yml
     when: "{{ 'leaf' in group_names }}"
 
-  - include: conf-net.yml
+  - include: conf-net-evpn.yml
 
 - hosts: 'server*'
   vars_files:
     - properties.yml
   tasks:
-    - include: hostset.yml
+    - include: hostset-evpn.yml
 
   handlers:
     - name: Reboot server to bring up bonds

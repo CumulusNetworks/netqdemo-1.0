@@ -24,7 +24,7 @@ exit_to_edge_ports: "swp1"
 protocol: 'bgp'
 
 ################### SVI and Host IP CONFIGURATION ###################
-lo_ip_subnet: '10.254.0.0/24'
+lo_ip_subnet: '10.254.0.0/27'
 # The host_ip_base assumes that the lower 3 bytes are free for
 # use with server IP address assignment. The second byte represents the rack
 # (or leaf) number, the third byte to represent the VLAN used with the server
@@ -37,6 +37,10 @@ lo_ip_subnet: '10.254.0.0/24'
 # byte is fixed to 253.
 server_ip_base: '10.'
 default_vlan: 20
+
+###################### EVPN Configuration ###########################
+vlans: 100-105
+anycast_vtep_subnet: '10.254.0.32/27'
 
 ################### Dual-Attach Server CONFIGURATION ################
 # Update the clag-peer ports based on how many server ports are there

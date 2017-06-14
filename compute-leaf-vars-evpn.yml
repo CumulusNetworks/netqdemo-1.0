@@ -1,0 +1,33 @@
+# This is meant to be included in other main playbooks
+---
+  - name: Identify CLAG Anycast VTEP IP
+    set_fact:
+      anycast_vtep_ip: |
+        {% if (my_node_id|int %2) == 1 %}
+          {{ anycast_vtep_subnet|ipsubnet(32, (my_node_id|int))|ipaddr('address') }}
+        {%else%}
+          {{ anycast_vtep_subnet|ipsubnet(32, (my_node_id|int - 1))|ipaddr('address') }}
+        {%endif%}
+    when: "{{ 'leaf' in group_names and dual_attach_hosts }}"
+    tags:
+      - compute
+      - ifconfig
+      - always
+
+  - name: Compute start of VNIs
+    set_fact:
+       vni_start: "{{ (vlans.split('-'))[0]|int }}"
+    when: "{{ 'leaf' in group_names and dual_attach_hosts }}"
+    tags:
+      - compute
+      - ifconfig
+      - always
+
+  - name: Compute end of VNIs
+    set_fact:
+       vni_end: "{{ ((vlans.split('-'))[-1]|int)+1 }}"
+    when: "{{ 'leaf' in group_names and dual_attach_hosts }}"
+    tags:
+      - compute
+      - ifconfig
+      - always
