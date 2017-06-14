@@ -24,7 +24,7 @@
                {% if dual_attach_hosts %}
                   add int {{ clag_peer_ports }}
                   add bridge bridge vids {{ vlans }}
-                  add bridge bridge pvid  {{ vlans }}
+                  add bridge bridge pvid  {{ default_vlan }}
 
                   add clag peer sys-mac {{ my_clag_sys_mac|trim }} interface {{ clag_peer_ports }} {{ my_clag_prio|trim }} backup-ip {{ clag_backup_ip|trim }} vrf mgmt
 
