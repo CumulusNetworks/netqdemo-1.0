@@ -2,6 +2,8 @@
 
 This demo will install Cumulus Linux [NetQ](https://docs.cumulusnetworks.com/display/DOCS/Using+netq+to+Troubleshoot+the+Network) Fabric Validation System using the Cumulus [reference topology](https://github.com/cumulusnetworks/cldemo-vagrant). Please vist the reference topology github page for detailed instructions on using Cumulus Vx with Vagrant.
 
+This demo includes configuring the fabric to be either L3 only or VxLAN with EVPN. The topology of EVPN with VxLAN doesn't support VxLAN routing at this time.
+
 ![Cumulus Reference Topology](https://github.com/CumulusNetworks/cldemo-vagrant/raw/master/cldemo_topology.png). 
 
 Quickstart
@@ -22,7 +24,7 @@ Quickstart
 * `vagrant ssh oob-mgmt-server`
 * `sudo su - cumulus`
 * `cd netqdemo`
-* `ansible-playbook -s RUNME.yml`
+* `ansible-playbook -s RUNME.yml` for L3 or `ansible-playbook -s RUNME-evpn.yml` for EVPN config
 * Log out and log back in to enable command completion for netq.
 * `netq help`
 * `netq check bgp`
@@ -35,8 +37,8 @@ Details
 ------------------------
 
 This demo will:
-* configure the customer reference topology with BGP unnumbered
-* configure CLAG on the leaves for the servers to be dual-attached and bonded. 
+* configure the customer reference topology with BGP unnumbered. For the EVPN config, it'll configure the VxLAN devices for VLANs 100-105 on the servers and on the bridges on leaves. PVID is 20.
+* configure CLAG on the leaves for the servers to be dual-attached and bonded. For EVPN, setup VxLAN active-active.
 * install NetQ on all nodes including servers and routers 
 * configure NetQ agents to start pushing data to the telemetry server
 
@@ -53,11 +55,12 @@ Some useful examples to get you going:
 * netq show changes between 1s and 2m
 * ip route | netq resolve | less -R
 
+To see VxLAN traceroute in action, log in to server01, ping 10.253.100.3. Then, type `netq trace 10.253.100.3 from 10.253.100.1 vrf default`.
 netq help and netq example provide further assistance in using netq. 
 
 Resetting The Topology
 ------------------------
-If a previous configuration was applied to the reference topology, it can be reset with the `reset.yml` playbook provided. This can be run before configuring netq to ensure a clean starting state.
+If a previous configuration was applied to the reference topology, it can be reset with the `reset.yml` playbook provided. This can be run before configuring netq to ensure a clean starting state. For example, use this to switch between the L3 only and EVPN configs.
 
     ansible-playbook -s reset.yml
 
