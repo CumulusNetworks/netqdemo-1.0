@@ -4,6 +4,29 @@
   - name: Create a dir for storing rendered configs locally
     file: path=localconfig state=directory owner=cumulus
 
+- hosts: all
+  gather_facts: false
+  vars_files:
+    - properties.yml
+  tasks:
+  - name: Compute start of VNIs
+    set_fact:
+       vni_start: "{{ (vlans.split('-'))[0]|int }}"
+    when: "{{ 'leaf' in group_names and dual_attach_hosts }}"
+    tags:
+      - compute
+      - ifconfig
+      - always
+
+  - name: Compute end of VNIs
+    set_fact:
+       vni_end: "{{ ((vlans.split('-'))[-1]|int)+1 }}"
+    when: "{{ 'leaf' in group_names and dual_attach_hosts }}"
+    tags:
+      - compute
+      - ifconfig
+      - always
+  
 - hosts: 'leaf*'
   any_errors_fatal: true
   gather_facts: false

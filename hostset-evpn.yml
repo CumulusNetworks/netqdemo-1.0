@@ -93,7 +93,7 @@
 
       become: true
       when: "{{ dual_attach_hosts }}"
-      with_sequence: start=100 end=106
+      with_sequence: start={{ vni_start|int }} end={{ vni_end|int }}
       tags:
         - hosts
         - ifconfig
