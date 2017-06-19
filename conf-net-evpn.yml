@@ -65,3 +65,13 @@
                add bgp neighbor {{ spine_to_exit_ports }} peer-group fabric
             {% endif %}
             add bgp evpn neighbor fabric activate
+
+- name: Save a local copy of the interfaces for reference  
+  fetch: src=/etc/network/interfaces dest=localconfig  
+  
+- name: Save a local copy of the quagga config for reference  
+  fetch: src=/etc/quagga/Quagga.conf dest=localconfig  
+  
+- name: Save a local copy of the NTP config for reference  
+  fetch: src=/etc/ntp.conf dest=localconfig  
+
