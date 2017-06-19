@@ -8,7 +8,7 @@ This demo includes configuring the fabric to be either L3 only or VxLAN with EVP
 
 Quickstart
 ------------------------
-* Running this simulation uses up 8G of RAM.
+* Running this simulation uses more than 10G of RAM.
 * Install [Vagrant](https://releases.hashicorp.com/vagrant/). Use release 1.9.5. 
 * Install cumulus plugin for vagrant via `vagrant plugin install vagrant-cumulus`
 * Install [Ansible](instructions at http://docs.ansible.com/ansible/intro_installation.html)
