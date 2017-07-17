@@ -4,7 +4,7 @@ This demo will install Cumulus Linux [NetQ](https://docs.cumulusnetworks.com/dis
 
 This demo includes configuring the fabric to be either L3 only or VxLAN with EVPN. The topology of EVPN with VxLAN doesn't support VxLAN routing at this time.
 
-![Cumulus Reference Topology](https://github.com/CumulusNetworks/cldemo-vagrant/raw/master/cldemo_topology.png). 
+![Cumulus Reference Topology](https://raw.githubusercontent.com/CumulusNetworks/cldemo-vagrant/master/documentation/cldemo_topology.png). 
 
 Quickstart
 ------------------------
