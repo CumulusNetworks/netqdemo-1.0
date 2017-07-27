@@ -83,7 +83,7 @@
         dest: /etc/network/interfaces
         marker: "# bond config"
         block: |
-          auto eth1 
+          auto eth1
           iface eth1 inet manual
              bond-master bond0
           #
@@ -103,8 +103,9 @@
              address {{ host_ip_addr|trim }}
              post-up ifenslave bond0 eth1 eth2
              post-up ip link set bond0 promisc on
-             post-up ip route replace default via {{ my_gw_ip | trim }} dev bond0
-      
+             post-up ip route add 10.0.0.0/8 via {{ my_gw_ip | trim }} dev bond0
+             #post-up ip route replace default via {{ my_gw_ip | trim }} dev bond0
+
       become: true
       when: "{{ dual_attach_hosts }}"
       tags:
