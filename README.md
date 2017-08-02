@@ -23,6 +23,7 @@ Quickstart
 * `vagrant up`
 * `vagrant ssh oob-mgmt-server`
 * `sudo su - cumulus`
+* `git clone https://github.com/cumulusnetworks/netqdemo-1.0 netqdemo`
 * `cd netqdemo`
 * `ansible-playbook -s RUNME.yml` for L3 or `ansible-playbook -s RUNME-evpn.yml` for EVPN config
 * Log out and log back in to enable command completion for netq.
