@@ -5,4 +5,4 @@ sudo sh -c 'echo "deb http://repo3.cumulusnetworks.com/repo Jessie-supplemental 
 sudo apt-get update
 sudo apt-get install -yq git python-netaddr sshpass
 sudo apt-get install -yq -t jessie-backports ansible
-git clone https://github.com/rdarbha/cldemo-provision-ts.git
+git clone https://github.com/cumulusnetworks/cldemo-provision-ts.git
