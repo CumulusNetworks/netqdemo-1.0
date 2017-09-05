@@ -15,7 +15,7 @@ Quickstart
 * Install git on your platform if you want to git clone this repository. Else select the download ZIP option from the directory and download the zip file.
 * Download the NetQ Telemetry Server from https://cumulusnetworks.com/downloads/#product=NetQ%20Virtual&version=1.0. You need to be logged in to the site to access this.
 * Pick the Vagrant hypervisor. This assumes the Virtualbox hypervisor. See note on libvirt below.
-* Add the downloaded box to vagrant via: vagrant box add cumulus-netq-telemetry-server-amd64-1.0.0-vagrant.box --name=cumulus/ts
+* Add the downloaded box to vagrant via: `vagrant box add cumulus-netq-telemetry-server-amd64-1.0.0-vagrant.box --name=cumulus/ts`
 * The Telemetry Server will be the oob-mgmt-server in the picture.
 * If you do not have the telemetry sever already installed, vagrant will refuse to spin up
 * If using a zip file, extract the downloaded zip file. If using git, run `git clone https://github.com/cumulusnetworks/netqdemo-1.0 netqdemo`
