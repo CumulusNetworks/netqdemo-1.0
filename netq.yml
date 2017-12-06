@@ -1,0 +1,54 @@
+---
+- hosts: '!server*'
+  tasks:
+     - name: Install cumulus-netq
+       apt: name=cumulus-netq update_cache=yes state=present
+
+     - name: Start netqd service
+       service: name=netqd state=restarted
+
+     - pause: seconds=5
+
+     - name: Add netq server IP addr
+       command: netq add server 192.168.0.254 vrf mgmt
+
+     - name: Start netq-agent
+       service: name=netq-agent state=restarted
+
+- hosts: 'server*'  
+  tasks:  
+     - name: Add netq repo key
+       apt_key:
+          url: https://hostapps3.cumulusnetworks.com/setup/cumulus-host-ubuntu.pubkey
+          state: present
+
+     - apt_repository:  
+          repo: deb https://hostapps3.cumulusnetworks.com/host/ubuntu xenial universe
+          state: present 
+  
+     - name: Install cumulus-netq  
+       apt: name=cumulus-netq update_cache=yes state=present  
+   
+     - name: Start netqd server
+       service: name=netqd state=restarted
+  
+     - pause: seconds=5
+
+     - name: Add netq server IP addr  
+       command: netq add server 192.168.0.254  
+  
+     - name: Start netq-agent  
+       service: name=netq-agent state=restarted  
+
+- hosts: localhost
+  tasks:
+     - name: Install netq apps
+       apt: name=netq-apps state=installed
+
+     - name: Start netqd server
+       service: name=netqd state=restarted
+
+     - pause: seconds=5
+
+     - name: Add local netq server IP
+       command: netq add server 127.0.0.1

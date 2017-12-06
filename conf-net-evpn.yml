@@ -1,0 +1,77 @@
+
+# This task configures /etc/network/interfaces on ifupdown2. The variables for
+# which interfaces are neighbors and networks come from the group_vars/all file.
+- name: configure mgmt VRF
+  shell: sleep 2 && net add vrf mgmt && net commit
+  ignore_errors: true
+  async: 1
+  poll: 0
+  notify: Wait for ssh to come back up
+
+- name: configure rest of networking
+  nclu:
+      atomic: true
+      description: "configure all the newtorking"
+      template: |
+
+            add loopback lo ip address {{ my_ip }}/32
+            {% if 'leaf' in hostvars[ansible_hostname]['group_names'] %}
+               add int {{ leaf_to_spine_ports }}
+               {% if 'exit' not in hostvars[ansible_hostname]['group_names'] %}
+                  add int {{ leaf_to_server_ports }}
+               {% endif %}
+
+               {% if dual_attach_hosts %}
+                  add int {{ clag_peer_ports }}
+                  add bridge bridge vids {{ vlans }}
+                  add bridge bridge pvid  {{ default_vlan }}
+
+                  add clag peer sys-mac {{ my_clag_sys_mac|trim }} interface {{ clag_peer_ports }} {{ my_clag_prio|trim }} backup-ip {{ clag_backup_ip|trim }} vrf mgmt
+
+                  {% if 'exit' not in hostvars[ansible_hostname]['group_names'] %}
+                     {% for i in range(server_port_start|int, server_port_end|int) %}
+                        add clag port bond bond-swp{{ i }} interface swp{{ i }} clag-id {{ i }}
+                     {% endfor %}
+
+                     add loopback lo clag vxlan-anycast-ip {{ anycast_vtep_ip|trim }}
+                     {% for vni in range(vni_start|int, vni_end|int) %}  
+                        add vxlan "vx-"{{vni}} vxlan id {{ vni }}  
+                        add vxlan "vx-"{{vni}} bridge access {{ vni }}  
+                        add vxlan "vx-"{{vni}} bridge learning off
+                        add vxlan "vx-"{{vni}} vxlan local-tunnelip {{ my_ip }}
+                     {% endfor %}  
+
+
+                  {% endif %}
+               {% endif %}
+            {% elif 'spine' in hostvars[ansible_hostname]['group_names'] %}
+               add int {{ spine_to_leaf_ports }}
+            {% endif %}
+
+            add bgp autonomous-system {{ my_asn }}
+            add bgp router-id {{ my_ip|trim }}
+            add bgp redistribute connected
+
+            add bgp bestpath as-path multipath-relax
+            add bgp neighbor fabric peer-group
+            add bgp neighbor fabric description Internal Fabric Network
+            add bgp neighbor fabric remote-as external
+            add bgp ipv6 unicast neighbor fabric activate
+            {% if 'leaf' in hostvars[ansible_hostname]['group_names'] %}
+               add bgp neighbor {{ leaf_to_spine_ports }} peer-group fabric
+               add bgp evpn advertise-all-vni
+            {% elif 'spine' in hostvars[ansible_hostname]['group_names'] %}
+               add bgp neighbor {{ spine_to_leaf_ports }} peer-group fabric
+               add bgp neighbor {{ spine_to_exit_ports }} peer-group fabric
+            {% endif %}
+            add bgp evpn neighbor fabric activate
+
+- name: Save a local copy of the interfaces for reference  
+  fetch: src=/etc/network/interfaces dest=localconfig  
+  
+- name: Save a local copy of the quagga config for reference  
+  fetch: src=/etc/quagga/Quagga.conf dest=localconfig  
+  
+- name: Save a local copy of the NTP config for reference  
+  fetch: src=/etc/ntp.conf dest=localconfig  
+

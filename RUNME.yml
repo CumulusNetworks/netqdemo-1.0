@@ -1,0 +1,134 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Create a dir for storing rendered configs locally
+    file: path=localconfig state=directory owner=cumulus
+
+- hosts: 'leaf*'
+  any_errors_fatal: true
+  gather_facts: false
+  vars_files:
+    - properties.yml
+  tasks:
+
+  - name: Get my node ID
+    set_fact:
+      my_node_id: "{{ inventory_hostname.split('f')[1]|int }}"
+    tags:
+      - compute
+      - always
+ 
+  - group_by: key='leaf'
+    when: "{{ 'leaf' in inventory_hostname }}"
+
+  - name: Get loopback IP for leaves
+    set_fact:
+       my_ip: "{{ lo_ip_subnet|ipsubnet(32, (my_node_id|int))|ipaddr('address') }}"
+
+  - name: Get my ASN for leaves
+    set_fact:
+      my_asn: "{{ bgp_leaf_asn_base|int + my_node_id|int }}"
+    tags:
+      - compute
+      - routing
+
+
+- hosts: 'spine*'
+  any_errors_fatal: true
+  vars_files:
+    - properties.yml
+  tasks:
+
+  - name: Get my node ID
+    set_fact:
+      my_node_id: "{{ inventory_hostname.split('e')[1]|int }}"
+    tags:
+      - compute
+      - always
+
+  - group_by: key='spine'
+    when: "{{ 'spine' in inventory_hostname }}"
+
+  - name: Get loopback IP for spines
+    set_fact:
+       my_ip: "{{ lo_ip_subnet|ipsubnet(32, -(my_node_id|int)-1)|ipaddr('address') }}"
+
+  - name: Get my ASN for spines
+    set_fact:
+      my_asn: "{{ bgp_spine_asn }}"
+    tags:
+      - compute
+      - routing
+
+- hosts: 'exit*'
+  any_errors_fatal: true
+  gather_facts: false
+  vars_files:
+    - properties.yml
+  tasks:
+
+  - name: Get my node ID
+    set_fact:
+      my_node_id: "{{ (16 + (inventory_hostname.split('t')[1]|int))|int }}"
+    tags:
+      - compute
+      - always
+ 
+  - group_by: key='leaf'
+    when: "{{ 'exit' in inventory_hostname }}"
+
+  - group_by: key='exit'
+    when: "{{ 'exit' in inventory_hostname }}"
+
+  - name: Get loopback IP for leaves
+    set_fact:
+       my_ip: "{{ lo_ip_subnet|ipsubnet(32, (my_node_id|int))|ipaddr('address') }}"
+
+  - name: Get my ASN for exit leaves
+    set_fact:
+      my_asn: "{{ bgp_exit_asn }}"
+    tags:
+      - compute
+      - routing
+
+
+- hosts: '!server*'
+  vars_files:
+    - properties.yml
+  any_errors_fatal: true
+  gather_facts: true
+  tasks:
+
+  - group_by: key='routers'
+    when: "{{ 'spine' in inventory_hostname or 'leaf' in inventory_hostname }}"
+    
+  - include: ntp.yml
+
+  - include: compute-leaf-vars-common.yml
+    when: "{{ 'leaf' in group_names }}"
+
+  - include: compute-leaf-vars-l3.yml
+    when: "{{ 'leaf' in group_names }}"
+
+  - include: conf-net.yml
+
+- hosts: 'server*'
+  vars_files:
+    - properties.yml
+  tasks:
+    - include: hostset.yml
+
+  handlers:
+    - name: Reboot server to bring up bonds
+      command: /usr/bin/systemd-run --on-active=10 /bin/systemctl reboot
+      async: 0
+      poll: 0
+      tags:
+        - command
+        - hosts
+        - ifconfig
+
+    - name: Wait for ssh to come back up
+      local_action: wait_for host={{ inventory_hostname }} state=started delay=3 timeout=7
+
+- include: netq.yml
